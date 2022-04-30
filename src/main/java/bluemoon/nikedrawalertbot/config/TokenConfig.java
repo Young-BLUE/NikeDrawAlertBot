@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Configuration
-public class Config {
+public class TokenConfig {
 
     private static String token;
     private static String id;

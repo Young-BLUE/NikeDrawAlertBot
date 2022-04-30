@@ -1,7 +1,6 @@
 package bluemoon.nikedrawalertbot.jsoup.nikeWeb;
 
 import java.io.IOException;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -25,26 +24,36 @@ public class NikeWebJsoup {
         Connection conn = Jsoup.connect(drawURL);
         List<String> drawList = new ArrayList<>();
 
+        ZonedDateTime today = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        String todayMonth = today.getMonthValue() + "월";
+        String todayDayOfMonth = String.valueOf(today.getDayOfMonth());
+
+        System.out.println(todayMonth + " " + todayDayOfMonth);
+
         try {
             Document document = conn.get();
-            Elements contents = document.select(".figcaption-content");
+//            Elements contents = document.select(".figcaption-content");
+            Elements contents = document.select(".launch-caption");
 
             if (contents.size() > 0) {
                 // 가져온 상품명 목록 태그로부터 상품명, 출시시간, 상품링크를 추출
-                for (Element e : contents) {
-                    if(e.select("a").text().contains("DRAW")) {
-                        StringBuilder sb = new StringBuilder();
-
-                        sb.append(e.select("h3").text() + "%0A"); // 예정시간
-                        sb.append(e.select("h6").text() + "%0A"); // 상품명
-                        sb.append("https://www.nike.com/" + e.select("a").attr("href")); // 상품 URL
-
-                        drawList.add(sb.toString());
-                    }
+                for(Element e : contents) {
+                    System.out.println(e);
                 }
+//                for (Element e : contents) {
+//                    if(e.select("a").text().contains("DRAW")) {
+//                        StringBuilder sb = new StringBuilder();
+//
+//                        sb.append(e.select("h3").text() + "%0A"); // 예정시간
+//                        sb.append(e.select("h6").text() + "%0A"); // 상품명
+//                        sb.append("https://www.nike.com/" + e.select("a").attr("href")); // 상품 URL
+//
+//                        drawList.add(sb.toString());
+//                        System.out.println(sb.toString());
+//                    }
+//                }
             } else {
-                log.info(new SimpleDateFormat("yyyy-MM-dd").format(ZonedDateTime.now(ZoneId.of("Asia/Seoul")))
-                         + " - 상품이 없습니다.");
+                log.info("DRAW 상품이 없습니다.");
             }
         } catch (IOException ie) {
             log.error(String.valueOf(ie));
